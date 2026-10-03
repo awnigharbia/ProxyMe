@@ -18,6 +18,16 @@
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshot-main.png" width="720" alt="Proxy list">
+</p>
+<p align="center">
+  <img src="docs/screenshot-editor.png" width="355" alt="Proxy editor">
+  <img src="docs/screenshot-settings.png" width="355" alt="Settings">
+</p>
+
 ## Features
 
 - **Truly system-wide** — a TUN interface captures all traffic, so `curl`, `git`, `ssh`, `brew`
