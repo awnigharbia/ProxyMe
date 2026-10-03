@@ -52,6 +52,14 @@
 
 ## Install
 
+**Download:** grab the latest DMG from [Releases](https://github.com/awnigharbia/ProxyMe/releases/latest) and drag ProxyMe to Applications. The build is not notarized, so clear the quarantine flag once:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/ProxyMe.app
+```
+
+**Or build from source:**
+
 **1. Clone**
 
 ```bash
