@@ -1,0 +1,75 @@
+name: ProxyMe
+options:
+  bundleIdPrefix: com.proxyme
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: 796V38FCT9
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "Apple Development"
+    ENABLE_HARDENED_RUNTIME: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+targets:
+  ProxyMe:
+    type: application
+    platform: macOS
+    sources:
+      - path: ProxyMe
+        excludes:
+          - "Resources/com.proxyme.app.helper.plist"
+      - path: Shared
+      - path: ProxyMe/Resources/com.proxyme.app.helper.plist
+        buildPhase:
+          copyFiles:
+            destination: wrapper
+            subpath: Contents/Library/LaunchDaemons
+    dependencies:
+      - target: ProxyMeHelper
+        embed: true
+        codeSign: true
+        copy:
+          destination: executables
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.proxyme.app
+        GENERATE_INFOPLIST_FILE: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_CFBundleDisplayName: ProxyMe
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+    postBuildScripts:
+      - name: Embed sing-box
+        basedOnDependencyAnalysis: false
+        script: |
+          set -euo pipefail
+          SRC="${SRCROOT}/Vendor/sing-box"
+          if [ ! -x "$SRC" ]; then
+            echo "error: Vendor/sing-box missing. Run scripts/fetch-sing-box.sh first."
+            exit 1
+          fi
+          DEST="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Helpers"
+          mkdir -p "$DEST"
+          cp -f "$SRC" "$DEST/sing-box"
+          cp -f "${SRCROOT}/Vendor/sing-box-LICENSE" "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/sing-box-LICENSE" 2>/dev/null || true
+          if [ "${CODE_SIGNING_ALLOWED:-YES}" = "YES" ] && [ -n "${EXPANDED_CODE_SIGN_IDENTITY:-}" ]; then
+            codesign --force --options runtime --timestamp=none \
+              --identifier com.proxyme.app.sing-box \
+              --sign "$EXPANDED_CODE_SIGN_IDENTITY" "$DEST/sing-box"
+          fi
+  ProxyMeHelper:
+    type: tool
+    platform: macOS
+    sources:
+      - path: ProxyMeHelper
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.proxyme.app.helper
+        PRODUCT_NAME: ProxyMeHelper
+        SKIP_INSTALL: YES
+        OTHER_CODE_SIGN_FLAGS: "--identifier com.proxyme.app.helper"
