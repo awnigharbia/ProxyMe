@@ -12,6 +12,7 @@
 <p align="center">
   <img alt="macOS 14+" src="https://img.shields.io/badge/macOS-14%2B-blue">
   <img alt="Swift" src="https://img.shields.io/badge/Swift-SwiftUI-orange">
+  <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-green">
   <img alt="Apple Silicon and Intel" src="https://img.shields.io/badge/arch-arm64%20%7C%20x86__64-lightgrey">
 </p>
 
@@ -131,3 +132,11 @@ Regenerate the app icon with `swift scripts/make-icon.swift icon.png`.
 
 Powered by [sing-box](https://github.com/SagerNet/sing-box) (GPLv3), bundled unmodified as a
 separate executable.
+
+## License
+
+ProxyMe's own source code is released under the [MIT License](LICENSE).
+
+sing-box is not part of this repository; it is downloaded at build time and remains under
+its own GPLv3 license. If you distribute a built `ProxyMe.app`, the bundled sing-box binary
+must be distributed under the terms of the GPLv3.
